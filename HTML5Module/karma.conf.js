@@ -1,4 +1,6 @@
 const os = require('os');
+const path = require('path');
+const fs = require('fs');
 
 module.exports = function(config) {
   "use strict";
@@ -8,16 +10,22 @@ module.exports = function(config) {
     .flat()
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
+  // Clean reports/coverage dir before run to avoid EEXIST error
+  const coverageDir = path.join(__dirname, 'reports', 'coverage');
+  if (fs.existsSync(coverageDir)) {
+    fs.rmSync(coverageDir, { recursive: true, force: true });
+  }
+
   config.set({
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
     ui5: {
-      url: "https://sapui5.hana.ondemand.com",
+      // Pin to a SAPUI5 version compatible with Chrome 94
+      url: "https://sapui5.hana.ondemand.com/1.108.0",
       mode: "script",
       config: {
         async: true,
         resourceRoots: {
-          // Map the namespace to the BASE-prefixed path that karma serves
           "ns.HTML5Module": "/base/webapp"
         }
       },
@@ -28,7 +36,6 @@ module.exports = function(config) {
     },
 
     files: [
-      // Serve webapp files but DON'T include them — UI5 loads them dynamically
       { pattern: 'webapp/**', served: true, included: false, watched: true }
     ],
 
@@ -39,10 +46,11 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
-      dir: 'reports',
+      dir: 'reports/coverage',   // write directly to final path
+      subdir: '.',               // no subdir nesting to avoid mkdir conflict
       reporters: [
-        { type: 'cobertura', subdir: 'coverage', file: 'coverage.xml' },
-        { type: 'lcov',      subdir: 'coverage' },
+        { type: 'cobertura', file: 'coverage.xml' },
+        { type: 'lcov' },
         { type: 'text-summary' }
       ]
     },
@@ -59,7 +67,7 @@ module.exports = function(config) {
     listenAddress: '0.0.0.0',
 
     colors: true,
-    logLevel: config.LOG_DEBUG,
+    logLevel: config.LOG_INFO,   // reduced from DEBUG to keep logs cleaner
     autoWatch: false,
     singleRun: true,
 
