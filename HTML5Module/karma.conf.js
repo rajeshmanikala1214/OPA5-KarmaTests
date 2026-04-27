@@ -31,7 +31,13 @@ module.exports = function(config) {
 		},
 		reporters: ["progress", "coverage"],
 
-        browsers: ["ChromiumHeadless"],
+         browsers: ["ChromeHeadlessNoSandbox"],  // use custom launcher
+        customLaunchers: {
+            ChromeHeadlessNoSandbox: {
+                base: "ChromeHeadless",
+                flags: ["--no-sandbox", "--disable-gpu"]
+            }
+        },
         
         browserConsoleLogOptions: {
 			level: "error"
