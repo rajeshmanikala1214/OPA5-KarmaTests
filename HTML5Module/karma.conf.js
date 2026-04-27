@@ -1,6 +1,4 @@
 const os = require('os');
-const path = require('path');
-const fs = require('fs');
 
 module.exports = function(config) {
   "use strict";
@@ -10,37 +8,41 @@ module.exports = function(config) {
     .flat()
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
-  // Clean reports/coverage dir before run to avoid EEXIST error
-  const coverageDir = path.join(__dirname, 'reports', 'coverage');
-  if (fs.existsSync(coverageDir)) {
-    fs.rmSync(coverageDir, { recursive: true, force: true });
-  }
-
   config.set({
-    basePath: '',
+    frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
-    frameworks: ['browserify', 'mocha'],
+    ui5: {
+      url: "https://sapui5.hana.ondemand.com",
+      mode: "script",
+      config: {
+        async: true,
+        resourceRoots: {
+          // Map the namespace to the BASE-prefixed path that karma serves
+          "ns.HTML5Module": "/base/webapp"
+        }
+      },
+      tests: [
+        "ns/HTML5Module/test/unit/AllTests",
+        "ns/HTML5Module/test/integration/AllJourneys"
+      ]
+    },
 
     files: [
-      'webapp/test/**/*.js'
-    ],
-
-    exclude: [
-      'webapp/test/**/*.conf.js'
+      // Serve webapp files but DON'T include them — UI5 loads them dynamically
+      { pattern: 'webapp/**', served: true, included: false, watched: true }
     ],
 
     preprocessors: {
-      'webapp/test/**/*.js': ['browserify', 'coverage']
+      'webapp/**/*.js': ['coverage']
     },
 
     reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
-      dir: 'reports/coverage',
-      subdir: '.',
+      dir: 'reports',
       reporters: [
-        { type: 'cobertura', file: 'coverage.xml' },
-        { type: 'lcov' },
+        { type: 'cobertura', subdir: 'coverage', file: 'coverage.xml' },
+        { type: 'lcov',      subdir: 'coverage' },
         { type: 'text-summary' }
       ]
     },
@@ -57,7 +59,7 @@ module.exports = function(config) {
     listenAddress: '0.0.0.0',
 
     colors: true,
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
     autoWatch: false,
     singleRun: true,
 
@@ -81,9 +83,10 @@ module.exports = function(config) {
     browserDisconnectTimeout: 210000,
     browserDisconnectTolerance: 3,
     browserNoActivityTimeout: 210000,
-    reportSlowerThan: 500,
 
     plugins: [
+      'karma-ui5',
+      'karma-qunit',
       'karma-mocha',
       'karma-chrome-launcher',
       'karma-junit-reporter',
