@@ -2,23 +2,31 @@
   "name": "html5module",
   "version": "0.0.1",
   "devDependencies": {
+    "@sap/ui5-builder-webide-extension": "1.0.x",
     "@sapui5/ts-types": "1.71.x",
     "@ui5/cli": "2.2.6",
-    "@sap/ui5-builder-webide-extension": "1.0.x",
     "bestzip": "2.1.4",
-    "rimraf": "3.0.2" ,
     "karma": "^4.4.1",
+    "karma-browserify": "^8.1.0",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.0.2",
-    "karma-ui5": "^2.2.0"
+    "karma-firefox-launcher": "^2.1.3",
+    "karma-junit-reporter": "^2.0.1",
+    "karma-mocha": "^2.0.1",
+    "karma-qunit": "^4.2.1",
+    "karma-sonarqube-unit-reporter": "^0.0.23",
+    "karma-ui5": "^2.4.0",
+    "karma-webdriver-launcher": "^1.0.8",
+    "mocha": "^11.7.5",
+    "qunit": "^2.25.0",
+    "rimraf": "3.0.2"
   },
   "scripts": {
     "build": "npm run clean && ui5 build --include-task=generateManifestBundle generateCachebusterInfo && npm run zip",
     "zip": "cd dist && npx bestzip ../HTML5Module-content.zip *",
-    "clean":"npx rimraf HTML5Module-content.zip dist" ,
-    "test": "karma start",
-    "karma":"karma start"
-},
+    "clean": "npx rimraf HTML5Module-content.zip dist",
+    "test": "karma start"
+  },
   "ui5": {
     "dependencies": [
       "@sap/ui5-builder-webide-extension"
