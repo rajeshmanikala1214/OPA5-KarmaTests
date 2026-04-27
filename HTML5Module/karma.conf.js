@@ -17,37 +17,27 @@ module.exports = function(config) {
   }
 
   config.set({
-    frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
+    basePath: '',
 
-    ui5: {
-      // Pin to a SAPUI5 version compatible with Chrome 94
-      url: "https://sapui5.hana.ondemand.com/1.108.0",
-      mode: "script",
-      config: {
-        async: true,
-        resourceRoots: {
-          "ns.HTML5Module": "/base/webapp"
-        }
-      },
-      tests: [
-        "ns/HTML5Module/test/unit/AllTests",
-        "ns/HTML5Module/test/integration/AllJourneys"
-      ]
-    },
+    frameworks: ['browserify', 'mocha'],
 
     files: [
-      { pattern: 'webapp/**', served: true, included: false, watched: true }
+      'webapp/test/**/*.js'
+    ],
+
+    exclude: [
+      'webapp/test/**/*.conf.js'
     ],
 
     preprocessors: {
-      'webapp/**/*.js': ['coverage']
+      'webapp/test/**/*.js': ['browserify', 'coverage']
     },
 
     reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
-      dir: 'reports/coverage',   // write directly to final path
-      subdir: '.',               // no subdir nesting to avoid mkdir conflict
+      dir: 'reports/coverage',
+      subdir: '.',
       reporters: [
         { type: 'cobertura', file: 'coverage.xml' },
         { type: 'lcov' },
@@ -67,7 +57,7 @@ module.exports = function(config) {
     listenAddress: '0.0.0.0',
 
     colors: true,
-    logLevel: config.LOG_INFO,   // reduced from DEBUG to keep logs cleaner
+    logLevel: config.LOG_INFO,
     autoWatch: false,
     singleRun: true,
 
@@ -91,10 +81,9 @@ module.exports = function(config) {
     browserDisconnectTimeout: 210000,
     browserDisconnectTolerance: 3,
     browserNoActivityTimeout: 210000,
+    reportSlowerThan: 500,
 
     plugins: [
-      'karma-ui5',
-      'karma-qunit',
       'karma-mocha',
       'karma-chrome-launcher',
       'karma-junit-reporter',
