@@ -3,14 +3,13 @@ const os = require('os');
 module.exports = function(config) {
   "use strict";
 
-  // Dynamic IP detection for Selenium Sidecar
   const networkInterfaces = os.networkInterfaces();
   const containerIp = Object.values(networkInterfaces)
     .flat()
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
   config.set({
-    frameworks: ['ui5', 'qunit', 'browserify', 'mocha'], // Added 'ui5' framework
+    frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
     ui5: {
       url: "https://sapui5.hana.ondemand.com",
@@ -18,10 +17,10 @@ module.exports = function(config) {
       config: {
         async: true,
         resourceRoots: {
-          "ns.HTML5Module": "./webapp" 
+          // Map the namespace to the BASE-prefixed path that karma serves
+          "ns.HTML5Module": "/base/webapp"
         }
       },
-      // Point to the specific "All" files you shared
       tests: [
         "ns/HTML5Module/test/unit/AllTests",
         "ns/HTML5Module/test/integration/AllJourneys"
@@ -29,15 +28,14 @@ module.exports = function(config) {
     },
 
     files: [
+      // Serve webapp files but DON'T include them — UI5 loads them dynamically
       { pattern: 'webapp/**', served: true, included: false, watched: true }
     ],
 
     preprocessors: {
-        // Use coverage on the actual source code, not the tests
-        'webapp/**/*.js': ['coverage']
+      'webapp/**/*.js': ['coverage']
     },
 
-    // 3. Simplified Reporters (Removed sonarqubeUnit temporarily to stop the crash)
     reporters: ['progress', 'coverage', 'junit'],
 
     coverageReporter: {
@@ -56,13 +54,12 @@ module.exports = function(config) {
       suite: 'KarmaTests'
     },
 
-    // 4. Networking
     port: 9876,
     hostname: containerIp,
     listenAddress: '0.0.0.0',
-     
+
     colors: true,
-    logLevel: config.LOG_DEBUG, // Increased log level to see more details
+    logLevel: config.LOG_DEBUG,
     autoWatch: false,
     singleRun: true,
 
@@ -97,7 +94,7 @@ module.exports = function(config) {
       'karma-coverage',
       'karma-webdriver-launcher'
     ],
-    
+
     concurrency: 1,
     forceJSONP: true
   });
