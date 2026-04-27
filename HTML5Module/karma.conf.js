@@ -12,13 +12,14 @@ module.exports = function(config) {
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
     ui5: {
-      url: "https://ui5.sap.com/1.71.50",
+      url: "https://sapui5.hana.ondemand.com",
       mode: "script",
       config: {
         async: true,
         resourceRoots: {
-  "ns.HTML5Module": "/base/webapp"
-}
+          // Map the namespace to the BASE-prefixed path that karma serves
+          "ns.HTML5Module": "/base/webapp"
+        }
       },
       tests: [
         "ns/HTML5Module/test/unit/AllTests",
