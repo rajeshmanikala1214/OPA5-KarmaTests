@@ -36,7 +36,7 @@ module.exports = function(config) {
       'webapp/**/*.js': ['coverage']
     },
 
-    reporters: ['progress', 'coverage', 'junit'],
+    reporters: ['progress', 'coverage', 'junit', 'sonarqubeUnit'],
 
     coverageReporter: {
       dir: 'reports',
@@ -58,7 +58,7 @@ module.exports = function(config) {
       sonarQubeVersion: 'LATEST',
       outputFile: 'reports/test-execution.xml',
       overrideTestDescription: true,
-      testPaths: ['ns/HTML5Module/test/**/*.js'],
+      testPaths: ['webapp/test'],
       testFilePattern: '.spec.js',
       useBrowserName: false
     },
