@@ -10,21 +10,24 @@ module.exports = function(config) {
  config.set({
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
-    ui5: {
-      // FIX: Use a pinned version (1.71.x) to stop the 'withResolvers' / 'apply' error
-      url: "https://ui5.sap.com/1.71.50", 
-      mode: "script",
-      config: {
-        async: true,
-        resourceRoots: {
-          "ns.HTML5Module": "/base/webapp"
-        }
-      },
-      tests: [
-        "ns/HTML5Module/test/unit/AllTests",
-        "ns/HTML5Module/test/integration/AllJourneys"
-      ]
-    },
+   ui5: {
+  // Use the full path to the resources folder to ensure proper discovery
+  url: "https://ui5.sap.com/1.71.50/resources", 
+  mode: "script",
+  config: {
+    async: true,
+    // Add the theme and libs explicitly to help the bootstrap
+    theme: "sap_fiori_3",
+    libs: "sap.m, sap.ui.core",
+    resourceRoots: {
+      "ns.HTML5Module": "/base/webapp"
+    }
+  },
+  tests: [
+    "ns/HTML5Module/test/unit/AllTests",
+    "ns/HTML5Module/test/integration/AllJourneys"
+  ]
+},
 
     files: [
       // Serve webapp files but DON'T include them — UI5 loads them dynamically
