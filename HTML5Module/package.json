@@ -14,7 +14,6 @@
     "karma-junit-reporter": "^2.0.1",
     "karma-mocha": "^2.0.1",
     "karma-qunit": "^4.2.1",
-    "karma-sonarqube-unit-reporter": "^0.0.23",
     "karma-ui5": "^2.4.0",
     "karma-webdriver-launcher": "^1.0.8",
     "mocha": "^11.7.5",
