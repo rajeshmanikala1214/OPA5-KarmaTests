@@ -7,11 +7,12 @@ module.exports = function(config) {
     .flat()
     .find(i => i.family === 'IPv4' && !i.internal)?.address || 'localhost';
 
-  config.set({
+ config.set({
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
     ui5: {
-      url: "https://sapui5.hana.ondemand.com",
+      // FIX: Use a pinned version (1.71.x) to stop the 'withResolvers' / 'apply' error
+      url: "https://ui5.sap.com/1.71.50", 
       mode: "script",
       config: {
         async: true,
@@ -57,7 +58,8 @@ module.exports = function(config) {
       outputFile: 'reports/test-execution.xml',
       overrideTestDescription: true,
       testPaths: ['webapp/test'],
-      testFilePattern: '.spec.js',
+      // FIX: Change to .js so it actually finds your files
+      testFilePattern: '.js', 
       useBrowserName: false
     },
 
