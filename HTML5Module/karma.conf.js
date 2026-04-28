@@ -12,7 +12,7 @@ module.exports = function(config) {
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
     ui5: {
-      url: "https://sapui5.hana.ondemand.com",
+      url: "https://ui5.sap.com/1.71.50",
       mode: "script",
       config: {
         async: true,
@@ -55,13 +55,15 @@ module.exports = function(config) {
     },
 
      sonarQubeUnitReporter: {
-      sonarQubeVersion: 'LATEST',
-      outputFile: 'reports/test-execution.xml',
-      overrideTestDescription: true,
-      testPaths: ['webapp/test'],
-      testFilePattern: '.spec.js',
-      useBrowserName: false
-    },
+    sonarQubeVersion: 'LATEST',
+    outputFile: 'reports/test-execution.xml',
+    overrideTestDescription: true,
+    // Change testPaths to point to the base webapp folder
+    testPaths: ['webapp/test/unit', 'webapp/test/integration'], 
+    // CRITICAL: Your files end in .js, not .spec.js
+    testFilePattern: '.js', 
+    useBrowserName: false
+},
     port: 9876,
     hostname: containerIp,
     listenAddress: '0.0.0.0',
