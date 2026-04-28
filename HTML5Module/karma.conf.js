@@ -12,7 +12,7 @@ module.exports = function(config) {
     frameworks: ['ui5', 'qunit', 'browserify', 'mocha'],
 
     ui5: {
-      url: "https://ui5.sap.com/1.71.50",
+      url: "https://sapui5.hana.ondemand.com",
       mode: "script",
       config: {
         async: true,
