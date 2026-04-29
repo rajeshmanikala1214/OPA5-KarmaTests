@@ -153,6 +153,14 @@ module.exports = function(config) {
       suite: 'KarmaTests'
     },
 
+    sonarQubeUnitReporter: {
+  sonarQubeVersion: 'LATEST',
+  outputFile: 'reports/test-execution.xml',
+  overrideTestDescription: true,
+  testPaths: ['webapp/test'],           // relative to HTML5Module basePath
+  testFilePattern: '.js',
+  useBrowserName: false
+},
     port: 9876,
     hostname: containerIp,
     listenAddress: '0.0.0.0',
