@@ -49,20 +49,24 @@ module.exports = function(config) {
 
       // Map suite name → test file path (relative to HTML5Module root)
       function suiteToFilePath(suite) {
-        var lc = suite.toLowerCase();
-        if (lc.indexOf('navigation') !== -1 || lc.indexOf('journey') !== -1) {
-          return 'webapp/test/integration/NavigationJourney.js';
-        }
-        if (lc.indexOf('model') !== -1) {
-          return 'webapp/test/unit/model/models.js';
-        }
-        if (lc.indexOf('formatter') !== -1) {
-          return 'webapp/test/unit/util/formatter.js';
-        }
-        if (lc.indexOf('view1') !== -1 || lc.indexOf('controller') !== -1) {
-          return 'webapp/test/unit/controller/View1.controller.js';
-        }
-        return 'webapp/test/unit/' + suite.replace(/\s+/g, '_') + '.js';
+       var lc = suite.toLowerCase();
+
+      const base = 'HTML5Module/webapp/test/';   // 🔥 ADD THIS
+
+      if (lc.indexOf('navigation') !== -1 || lc.indexOf('journey') !== -1) {
+      return base + 'integration/NavigationJourney.js';
+       }
+      if (lc.indexOf('model') !== -1) {
+       return base + 'unit/model/models.js';
+      }
+      if (lc.indexOf('formatter') !== -1) {
+      return base + 'unit/util/formatter.js';
+      }
+      if (lc.indexOf('view1') !== -1 || lc.indexOf('controller') !== -1) {
+      return base + 'unit/controller/View1.controller.js';
+      }
+
+      return base + 'unit/' + suite.replace(/\s+/g, '_') + '.js';
       }
 
       var xml = '<testExecutions version="1">\n';
@@ -154,13 +158,14 @@ module.exports = function(config) {
     },
 
     sonarQubeUnitReporter: {
-  sonarQubeVersion: 'LATEST',
-  outputFile: 'reports/test-execution.xml',
-  overrideTestDescription: true,
-  testPaths: ['webapp/test'],           // relative to HTML5Module basePath
-  testFilePattern: '.js',
-  useBrowserName: false
-},
+    sonarQubeVersion: 'LATEST',
+    outputFile: 'reports/test-execution.xml',
+    overrideTestDescription: true,
+    testPaths: ['webapp/test'],           // relative to HTML5Module basePath
+    testFilePattern: '.js',
+    useBrowserName: false
+    },
+    
     port: 9876,
     hostname: containerIp,
     listenAddress: '0.0.0.0',
